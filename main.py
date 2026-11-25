@@ -40,6 +40,10 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     dest = os.path.join(out_dir, "entry.png")
     shutil.copyfile(SRC, dest)
+    with open(dest, "rb") as f:
+        written = f.read()
+    if hashlib.sha256(written).hexdigest() != hashlib.sha256(data).hexdigest():
+        return fail("wrote %s but its bytes differ from entry.png" % dest)
     print("wrote %s (%d bytes, 1024x1024, sha256 %s)"
           % (dest, len(data), hashlib.sha256(data).hexdigest()))
     return 0
